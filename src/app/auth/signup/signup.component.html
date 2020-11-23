@@ -1,0 +1,34 @@
+<section>
+
+  <form (ngSubmit)="onSubmit(singup)" #singup="ngForm"
+  fxLayout="column" fxLayoutAlign="center center">
+  <mat-form-field>
+    <input name="email" ngModel
+    required #email="ngModel"
+    matInput type="email" placeholder="Email">
+    <mat-error> E=mail required </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input name="password" ngModel #password="ngModel" required
+    matInput type="password" placeholder="Password">
+    <mat-error> Password should required </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input [max]="maxDate" name="date" ngModel required
+      matInput [matDatepicker]="picker" placeholder="Choose a date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error> Date required </mat-error>
+  </mat-form-field>
+
+  <mat-checkbox required color="primary"
+   ngModel name="agree">
+   Agree to terms and condition </mat-checkbox>
+
+  <button [disabled]="singup.invalid"
+   mat-raised-button color="primary"> Sign up </button>
+</form>
+
+
+</section>

@@ -7,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TrainingComponent implements OnInit {
 
+
+  ongoiningTraining = false;
   constructor() { }
 
   ngOnInit(): void {
+
   }
 
 }

@@ -1,0 +1,16 @@
+mat-sidenav-container,mat-sidenav {
+  height: 100vh;
+}
+
+mat-sidenav{
+  width: 200px;
+}
+.spacer {
+  flex: 1 1 auto;
+}
+
+a{
+  text-decoration: none;
+  padding: 10px;
+  color: white;
+}

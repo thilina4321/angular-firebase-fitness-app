@@ -1,1 +1,25 @@
-<p>new-training works!</p>
+<div class="new">
+
+  <mat-card >
+    <mat-card-title>
+      Time to start the work out
+    </mat-card-title>
+    <mat-card-content>
+
+      <!-- this is the dropdown for the training items -->
+      <mat-form-field appearance="fill">
+        <mat-label>Choose training</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let train of training" [value]="train">
+            {{train}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </mat-card-content>
+    <mat-card-actions>
+      <button (click)="onstartTraining()" mat-flat-button> Start </button>
+    </mat-card-actions>
+  </mat-card>
+
+</div>

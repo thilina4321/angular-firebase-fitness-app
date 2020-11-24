@@ -14,6 +14,8 @@ import { NewTrainingComponent } from './training/new-training/new-training.compo
 import { PastTrainingComponent } from './training/past-training/past-training.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { FormsModule } from '@angular/forms';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { StopTrainingDialogComponent } from './training/stop-training-dialog/stop-training-dialog.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { FormsModule } from '@angular/forms';
     NewTrainingComponent,
     PastTrainingComponent,
     WelcomeComponent,
+    PageNotFoundComponent,
+    StopTrainingDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -2,13 +2,14 @@
   <mat-sidenav #sidenav>
     <mat-nav-list>
 
-      <a mat-mat-icon-button mat-list-item routerLink="/signup"  (click)="sidenav.close()">
+      <a [fxHide]="isAuth" mat-mat-icon-button mat-list-item routerLink="/signup"  (click)="sidenav.close()">
         <mat-icon> menu </mat-icon> Sign up </a>
-      <a mat-mat-icon-button mat-list-item routerLink="/login"  (click)="sidenav.close()">
+      <a [fxHide]="isAuth" mat-mat-icon-button mat-list-item routerLink="/login"  (click)="sidenav.close()">
         <mat-icon> alarm </mat-icon> Log in </a>
-      <a mat-mat-icon-button mat-list-item routerLink="/training"  (click)="sidenav.close()">
+      <a [fxHide]="!isAuth" mat-mat-icon-button mat-list-item routerLink="/training"  (click)="sidenav.close()">
         <mat-icon> assignment </mat-icon>Training </a>
-      <a mat-mat-icon-button mat-list-item routerLink="/"  (click)="sidenav.close()">
+      <a (click)="onLogout()"
+      [fxHide]="!isAuth" mat-mat-icon-button mat-list-item   (click)="sidenav.close()">
         <mat-icon> face </mat-icon> Log out </a>
 
    </mat-nav-list>
@@ -22,9 +23,13 @@
       <a routerLink="/">Logo</a>
       <span class="spacer"> </span>
       <div fxHide.lt-sm>
-        <a routerLink="/signup"> Sign up </a>
-        <a routerLink="/login"> Log in </a>
-        <a routerLink="/training"> Training </a>
+        <a routerLink="/signup"  [fxHide]="isAuth"> Sign up </a>
+        <a routerLink="/login" [fxHide]="isAuth"> Log in </a>
+        <a routerLink="/training" [fxHide]="!isAuth"> Training </a>
+        <a [fxHide]="!isAuth"
+          routerLink="/" (click)="onLogout()"
+           (click)="sidenav.close()">
+           Log out </a>
       </div>
     </mat-toolbar>
     <router-outlet></router-outlet>

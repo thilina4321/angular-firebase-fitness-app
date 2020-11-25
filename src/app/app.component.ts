@@ -15,10 +15,12 @@ export class AppComponent implements OnInit, OnDestroy{
   constructor(private authService:AuthService){}
 
   ngOnInit(){
+
+    this.authService.authListner()
+
     this.authSubscription = this.authService.isAuth.subscribe((authStatus)=>{
       this.isAuth = authStatus;
     })
-    console.log(this.isAuth);
 
   }
 
@@ -28,6 +30,7 @@ export class AppComponent implements OnInit, OnDestroy{
 
   ngOnDestroy(){
     this.authSubscription.unsubscribe()
+    // this.authService.cancelAuthSubscription()
   }
 
 

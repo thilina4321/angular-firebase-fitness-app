@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/firestore';
+import {   Subject, Subscription } from 'rxjs';
 import { Exerice } from './exerice';
 
 @Injectable({
@@ -7,28 +8,63 @@ import { Exerice } from './exerice';
 })
 export class TrainingService {
 
-  constructor() { }
+  constructor(private firestore:AngularFirestore) { }
 
 
-  exerices$ = new BehaviorSubject<Exerice[]>([]);
   exe$ = new Subject<boolean>();
   currenExe$!:Exerice
+  exerices$ = new Subject<Exerice[]>()
+  finishedExe$ = new Subject<Exerice[]>()
+  trainingSubscriptions:Subscription[] = []
+
+
+
   completeOrCancelExerice:Exerice[] = []
+  exerices:Exerice[] = []
 
-  exerices:Exerice[] = [
-    {id:'1', name:'Streched', duration:30, calories:8},
-    {id:'2', name:'Chumches', duration:60, calories:18},
-    {id:'3', name:'Tobolo', duration:120, calories:9},
-    {id:'4', name:'ArmGymsics', duration:180, calories:13},
-  ];
 
-  getTraining(){
-    this.exerices$.next(this.exerices)
+  fetchFinishedExerices() {
+
+    let exe:Exerice[] = [];
+     this.trainingSubscriptions.push(this.firestore.collection('finishedExerices').snapshotChanges()
+   .subscribe((result)=>{
+
+    console.log(result);
+
+
+
+     this.completeOrCancelExerice = result.map((res:any)=>{
+       return res.payload.doc.data()
+     })
+     this.finishedExe$.next([...this.completeOrCancelExerice])
+
+   }))
+ }
+
+   fetchAvailableTraining() {
+     console.log('kollo');
+
+     let exe:Exerice[] = [];
+     this.trainingSubscriptions.push(this.firestore.collection('exerices').snapshotChanges()
+    .subscribe((result)=>{
+      result.forEach(res => {
+         let data:any = res.payload.doc.data()
+         exe.push({
+          id:res.payload.doc.id,
+          name : data['name'],
+          duration : data['duration'],
+          calories : data['calories']
+        })
+
+      });
+
+      this.exerices = exe
+      this.exerices$.next([...this.exerices])
+
+    }))
   }
 
-  getAllTrainings(){
-    return [...this.completeOrCancelExerice]
-  }
+
 
   getExerice(id:string){
     let exe = this.exerices.find(ex=> ex.id == id)
@@ -41,22 +77,28 @@ export class TrainingService {
   }
 
   completeExerice(){
-    this.completeOrCancelExerice.push({...this.currenExe$,
+    this.exe$.next(false)
+    this.addDataToDatabase({...this.currenExe$,
       state:'completed',
        date:new Date()})
-       console.log('complete');
-       this.exe$.next(false)
 
   }
 
   cancelExerice(){
+    this.exe$.next(false)
 
-    this.completeOrCancelExerice.push({...this.currenExe$,
+    this.addDataToDatabase({...this.currenExe$,
       state:'canceled',
-       date:new Date()})
-       console.log('cancel');
-       this.exe$.next(false)
+       date: new Date()})
 
+  }
+
+  addDataToDatabase(exerice:Exerice){
+    this.firestore.collection('finishedExerices').add(exerice)
+  }
+
+  cancelSubscription(){
+    this.trainingSubscriptions.forEach(ac=> ac.unsubscribe())
   }
 
 

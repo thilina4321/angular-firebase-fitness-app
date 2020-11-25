@@ -11,7 +11,9 @@ const routes: Routes = [
   {path:'', component:WelcomeComponent},
   {path:'signup', component:SignupComponent},
   {path:'login', component:LoginComponent},
-  {path:'training', canActivate:[AuthGuard], component:TrainingComponent},
+  {path:'training',
+  canActivate:[AuthGuard],
+   component:TrainingComponent},
   {path:'**', component:PageNotFoundComponent},
 ];
 

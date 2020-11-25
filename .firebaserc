@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "myfitness-angular": {
+      "hosting": {
+        "myFitness": [
+          "myfitness-angular"
+        ]
+      }
+    }
+  }
+}

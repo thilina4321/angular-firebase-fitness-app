@@ -1,49 +1,63 @@
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { TrainingService } from '../training/training.service';
 import { AuthData } from './auth-data';
-import { UserData } from './user-data';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
-  user:UserData | undefined;
   isAuth = new Subject<boolean>();
+  authSubscription!:Subscription
 
-  constructor(private router:Router) { }
+  constructor(
+    private router: Router,
+    private trainingService: TrainingService,
+    private auth: AngularFireAuth
+  ) {}
 
-  registerUser(authData:AuthData){
-    this.user = {
-      email:authData.email,
-      userId: (Math.round(Math.random() * 1000)).toString()
-    }
-    this.isAuth.next(true)
+  authListner() {
+    this.auth.authState.subscribe((user) => {
+      if (user) {
+
+        this.isAuth.next(true);
+        this.router.navigate(['/training']);
+      } else {
+
+        this.isAuth.next(false);
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
-  login(authData:AuthData){
-    this.user = {
-      email:authData.email,
-      userId: (Math.round(Math.random() * 1000)).toString()
-    }
-    this.isAuth.next(true);
-    if(this.isAuth){
-      this.router.navigate(['/training'])
-    }
-
+  registerUser(authData: AuthData) {
+    this.auth
+      .createUserWithEmailAndPassword(authData.email, authData.password)
+      .then((res) => {
+        this.isAuth.next(true);
+      })
+      .catch((error) => console.log(error));
   }
 
-  logout(){
-    this.user = undefined;
-    this.isAuth.next(false)
-    this.router.navigate(['/login'])
+  login(authData: AuthData) {
+    this.auth
+      .signInWithEmailAndPassword(authData.email, authData.password)
+      .then((res) => {
+
+        this.isAuth.next(true);
+        this.router.navigate(['/training']);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
   }
 
-  getUser(){
-    return {...this.user}
+  logout() {
+    this.auth.signOut();
+    this.trainingService.cancelSubscription();
+
   }
-
-
 
 }

@@ -21,7 +21,6 @@ export class CurrentTrainingComponent implements OnInit {
      ngOnInit(): void {
 
       this.step = (this.trainingService.currenExe$.duration / 100) * 1000
-      console.log(this.step);
 
      this.timer = setInterval(()=>{
       this.progress += 1;

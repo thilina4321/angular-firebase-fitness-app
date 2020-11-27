@@ -24,7 +24,6 @@ export class PastTrainingComponent implements OnDestroy,OnInit,AfterViewInit {
     // let exe:Exerice[] = []
 
     this.trainingSubscription = this.trainingService.finishedExe$.subscribe((exe)=>{
-      console.log(exe.length);
 
       this.dataSource.data = exe
     })

@@ -1,8 +1,6 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/auth/auth.service';
 import { Exerice } from '../exerice';
 import { TrainingService } from '../training.service';
 
@@ -19,7 +17,6 @@ export class NewTrainingComponent implements OnInit,OnDestroy {
 
   constructor(
     private trainingService: TrainingService,
-    private authService:AuthService,
   ) {}
 
   userId!:string

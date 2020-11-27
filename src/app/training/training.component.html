@@ -16,3 +16,7 @@
 <section *ngIf="ongoiningTraining">
   <app-current-training></app-current-training>
 </section>
+
+<div fxLayoutAlign="center center" *ngIf="isAllow">
+  <button mat-raised-button (click)="goNext()"> Next </button>
+</div>

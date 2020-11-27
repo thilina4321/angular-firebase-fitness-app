@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {   Subject, Subscription } from 'rxjs';
-import { AuthService } from '../auth/auth.service';
 import { Exerice } from './exerice';
 
 @Injectable({
@@ -12,7 +11,6 @@ export class TrainingService {
 
   constructor(private firestore:AngularFirestore,
     private _snackBar:MatSnackBar,
-    private authService:AuthService,
     ) { }
 
 
@@ -91,7 +89,6 @@ export class TrainingService {
     this.addDataToDatabase({...this.currenExe$,
       state:'completed',
       role:'',
-      userId:this.authService.userId,
 
        date:new Date()})
 
@@ -103,7 +100,6 @@ export class TrainingService {
     this.addDataToDatabase({...this.currenExe$,
       state:'canceled',
       role:'',
-      userId:this.authService.userId,
        date: new Date()})
 
   }

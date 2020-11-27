@@ -6,3 +6,7 @@ mat-card{
 .new{
   text-align: center;
 }
+
+mat-spinner{
+  margin: auto;
+}

@@ -17,7 +17,15 @@
   <button [disabled]="singup.invalid"
    mat-raised-button color="primary"> Log in </button>
 </form>
+
+
 </section>
+<div>
+  <mat-spinner *ngIf="isLoading$ | async"></mat-spinner>
+
+</div>
+
+
 
   <!-- <mat-form-field>
     <input [max]="maxDate" name="date" ngModel required

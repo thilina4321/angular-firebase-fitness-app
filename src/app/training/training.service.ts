@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {   Subject, Subscription } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 import { Exerice } from './exerice';
 
 @Injectable({
@@ -8,43 +10,44 @@ import { Exerice } from './exerice';
 })
 export class TrainingService {
 
-  constructor(private firestore:AngularFirestore) { }
+  constructor(private firestore:AngularFirestore,
+    private _snackBar:MatSnackBar,
+    private authService:AuthService,
+    ) { }
 
 
+  isLoading = new Subject<boolean>();
   exe$ = new Subject<boolean>();
   currenExe$!:Exerice
   exerices$ = new Subject<Exerice[]>()
   finishedExe$ = new Subject<Exerice[]>()
   trainingSubscriptions:Subscription[] = []
 
-
-
   completeOrCancelExerice:Exerice[] = []
   exerices:Exerice[] = []
-
 
   fetchFinishedExerices() {
 
     let exe:Exerice[] = [];
      this.trainingSubscriptions.push(this.firestore.collection('finishedExerices').snapshotChanges()
-   .subscribe((result)=>{
-
-    console.log(result);
-
-
+     .subscribe((result)=>{
 
      this.completeOrCancelExerice = result.map((res:any)=>{
        return res.payload.doc.data()
      })
      this.finishedExe$.next([...this.completeOrCancelExerice])
 
+   },(errors)=>{
+    this._snackBar.open('Faild to fetch the data', '', {
+      duration: 2000,
+    });
    }))
  }
 
    fetchAvailableTraining() {
-     console.log('kollo');
 
      let exe:Exerice[] = [];
+     this.isLoading.next(true)
      this.trainingSubscriptions.push(this.firestore.collection('exerices').snapshotChanges()
     .subscribe((result)=>{
       result.forEach(res => {
@@ -58,10 +61,17 @@ export class TrainingService {
 
       });
 
+      this.isLoading.next(false)
+
+
       this.exerices = exe
       this.exerices$.next([...this.exerices])
 
-    }))
+    },(errors)=>{
+      this._snackBar.open('Faild to fetch the data', '', {
+        duration: 2000,
+      });
+     }))
   }
 
 
@@ -80,6 +90,9 @@ export class TrainingService {
     this.exe$.next(false)
     this.addDataToDatabase({...this.currenExe$,
       state:'completed',
+      role:'',
+      userId:this.authService.userId,
+
        date:new Date()})
 
   }
@@ -89,6 +102,8 @@ export class TrainingService {
 
     this.addDataToDatabase({...this.currenExe$,
       state:'canceled',
+      role:'',
+      userId:this.authService.userId,
        date: new Date()})
 
   }

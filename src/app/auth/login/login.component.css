@@ -2,3 +2,12 @@ mat-form-field{
   width: 80%;
   margin: 0 auto;
 }
+
+section{
+  text-align: center;
+}
+
+mat-spinner{
+  width: 60%;
+  margin: 0 auto;
+}

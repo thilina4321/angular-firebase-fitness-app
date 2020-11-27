@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { AngularFirestore } from '@angular/fire/firestore';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 import { Exerice } from '../exerice';
 import { TrainingService } from '../training.service';
 
@@ -13,14 +14,21 @@ import { TrainingService } from '../training.service';
 export class NewTrainingComponent implements OnInit,OnDestroy {
   training: Exerice[] = [];
   trainingSubscription!: Subscription;
+  isLaoding = false
+  isLaodingSubscription!:Subscription
 
   constructor(
     private trainingService: TrainingService,
-
-    private firestore: AngularFirestore
+    private authService:AuthService,
   ) {}
 
+  userId!:string
+
   ngOnInit(): void {
+    this.isLaodingSubscription = this.trainingService.isLoading.subscribe((load)=>{
+      this.isLaoding = load
+    })
+
     this.trainingService
     .fetchFinishedExerices()
     this.trainingService.fetchAvailableTraining();
@@ -34,6 +42,7 @@ export class NewTrainingComponent implements OnInit,OnDestroy {
   }
 
   ngOnDestroy(){
+    this.isLaodingSubscription.unsubscribe()
     this.trainingSubscription.unsubscribe()
   }
 

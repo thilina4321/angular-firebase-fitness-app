@@ -8,9 +8,11 @@
     <mat-card-content>
 
       <!-- this is the dropdown for the training items -->
-      <mat-form-field appearance="fill">
+      <mat-spinner *ngIf="isLaoding"></mat-spinner>
+      <mat-form-field *ngIf="!isLaoding" appearance="fill">
         <mat-label>Choose training</mat-label>
-        <mat-select ngModel name="exerice" required>
+        <mat-select
+         ngModel name="exerice" required>
           <mat-option *ngFor="let train of training" [value]="train.id">
             {{train.name}}
           </mat-option>

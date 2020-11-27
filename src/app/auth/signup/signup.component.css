@@ -5,3 +5,8 @@ mat-form-field{
   margin: 0 auto;
 
 }
+
+mat-spinner{
+  width: 60%;
+  margin: 0 auto;
+}
